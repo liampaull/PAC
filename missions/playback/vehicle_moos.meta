@@ -1,0 +1,42 @@
+#include config/common.def
+#include config/$(VEHICLE_NAME).def
+#include config/sensors.def
+#include config/latlong.def
+
+#include ../common_plugs/common/data_errata.plug
+#include ../common_plugs/common/data_datum.plug
+
+//#define DEBUG
+
+ProcessConfig = ANTLER
+{
+	MSBetweenLaunches = 100
+
+	Run = MOOSDB			@ NewConsole = false
+	Run = pNodeReporter		@ NewConsole = false
+	
+	// uFld and stuff to connect with shoreside
+	Run = pHostInfo		     	@ NewConsole = false
+	Run = pShare			@ NewConsole = false
+	Run = uFldNodeBroker		@ NewConsole = false
+	
+	Run = uPlayback			@ NewConsole = false
+	Run = uTimerScript		@ NewConsole = false
+	Run = pVRP			@ NewConsole = false
+}
+
+
+#include ../common_plugs/vehicle/pNodeReporter.plug
+
+#include ../common_plugs/common/pHostInfo.plug
+#include ../common_plugs/vehicle/pShare.plug
+#include ../common_plugs/vehicle/uFldNodeBroker.plug
+
+ProcessConfig = uTimerScript
+{
+        AppTick = 4
+        CommsTick = 4
+        event = var=ACOMMS_TRANSMIT_RATE,val=1,time=1
+	event = var=NAV_DEPTH,val=0,time=1
+        event = quit, time=2
+}

@@ -1,0 +1,35 @@
+Behavior = BHV_Waypoint
+{ 
+    name       = goto_and_return
+    pwt        = 100
+    condition  = MISSION_MODE = GOTO
+    endflag    = MISSION_MODE = RETURN
+    perpetual  = true
+    updates    = GOTO_UPDATES
+
+    lead          = 15
+    lead_to_start = true
+    lead_damper   = 1
+    speed         = $(CRUISESPEED)
+    radius        = 4.0
+    slip_radius   = 10.0
+    points        = $(RETURN_PT)
+    repeat        = 1
+    visual_hints  = nextpt_color=red, nextpt_lcolor=green
+    visual_hints  = vertex_color=red, line_color=green
+    visual_hints  = vertex_size=2, edge_size=1
+}
+
+Behavior = BHV_StationKeep
+{
+    name             = Archie_Stationkeep
+    pwt              = 100
+    condition        = MISSION_MODE = STATION-KEEP
+    center_activate  = true
+    
+    station_pt    = 0,0
+    inner_radius  = 5
+    outer_radius  = 10
+    outer_speed   = 1.0
+    swing_time    = 3
+}

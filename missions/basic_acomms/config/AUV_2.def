@@ -1,0 +1,10 @@
+#define VEHICLE_TYPE auv
+#define VPORT 9002
+#define SHARE_LISTEN 9302
+#define MODEM_ID 2
+#define START_X 27
+#define START_Y -34
+#define START_HEADING 180
+#define DESIRED_SPEED 4.0
+#define DEPLOY_DEPTH 5
+#define WORKSPACE 50,-100:250,-100:250,-350:50,-350

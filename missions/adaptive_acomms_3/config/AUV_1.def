@@ -1,0 +1,17 @@
+#define VEHICLE_TYPE auv
+#define VNAME $(VEHICLE_NAME)
+#define VHOST localhost
+#define VPORT 9001
+#define SHARE_LISTEN 9301
+#define MODEM_ID 1
+#define START_X1 -130
+#define START_Y1 -70
+#define START_X2 -130
+#define START_Y2 -380
+#define START_HEADING 180
+#define START_LEG down
+#define DESIRED_SPEED 4.0
+#define DEPLOY_DEPTH 0.0
+#define WORKSPACE -150,-100:50,-100:50,-350:-150,-350
+#define SURVEY_DIRECTION 90.0
+#define LEG_LENGTH 310

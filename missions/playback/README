@@ -1,0 +1,5 @@
+run ./playback_launch.sh for each vehicle and select the appropriate moos file and moos port etc in uPlayback
+
+run ./sim_shoreside_launch.sh and the pMarineViewer pops up (it will be in an error state because node reports are missing data.. that's ok)
+
+Hit run on the uPlayback windows  

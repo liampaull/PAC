@@ -1,0 +1,8 @@
+#include config/$(VEHICLE_NAME).def
+
+initialize LEG = $(START_LEG)
+
+#include plugs/survey_up_leg.plug
+#include plugs/survey_down_leg.plug
+#include ../common_plugs/vehicle/behaviors/deploy_depth.plug
+#include ../common_plugs/vehicle/behaviors/return.plug

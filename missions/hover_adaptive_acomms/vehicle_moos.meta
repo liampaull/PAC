@@ -1,0 +1,34 @@
+#include config/common.def
+#include config/$(VEHICLE_NAME).def
+#include config/sensors.def
+
+#include ../common_plugs/common/data_errata.plug
+
+
+ProcessConfig = ANTLER
+{
+	MSBetweenLaunches = 100
+
+	Run = isam_coop			@ NewConsole = false, ExtraProcessParams=6, InhibitMOOSParams=true, XConfig=3
+	6 = -n,$(NUM_AUVS),-i,$(MODEM_ID),-l,766$(MODEM_ID)
+
+	// The basics
+
+	Run = pHelmIvP			@ NewConsole = false
+	Run = uProcessWatch		@ NewConsole = false
+	Run = pSensorProc		@ NewConsole = false
+	Run = pAcommsScheduler		@ NewConsole = false // be careful there might be two things called this
+	Run = pAcommsManager		@ NewConsole = false
+	Run = pCoverageMap		@ NewConsole = false
+	Run = pAdaptiveSurveyPlanner    @ NewConsole = false
+
+}
+
+
+	#include ../common_plugs/vehicle/pHelmIvP.plug
+	#include ../common_plugs/common/uProcessWatch.plug
+	#include plugs/pSensorProc.plug
+        #include ../common_plugs/vehicle/pAcommsScheduler.plug
+        #include ../common_plugs/vehicle/pAcommsManager.plug
+        #include plugs/pCoverageMap.plug
+        #include plugs/pAdaptiveSurveyPlanner.plug

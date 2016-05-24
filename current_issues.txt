@@ -1,0 +1,12 @@
+o If last track is outside of workspace it shoots off to infinity
+o sharp vehicle turns cause trouble (dampen the pid gains on the kayaks to prevent?) (or update the track-point on the waypoint behavior?)
+o still having issues with gaps occuring when trajectory gets long - must be caused by missed updates in pCoverageMap or multi-threading issue.
+o could downsample trajectory much more on kayaks I think since they are moving 4 times slower.
+o would love to be able to get the lcm plots onto the shoreside in the pavillion.
+o add covariance ellipses to lcm plotter.
+o ultimately should be actually marginalizing out the old poses in isam_coop (currently not just skipping them when the trajectory is received in pCoverageMap)
+o Also still possible issues of timing after subsequent acomms failures. This is caused by the fact that we are doing a batch marginalization in isam_coop packetmanager when we receive a packet request. Alternative could be the old way of composing as we go. Can do this for auvcslam though so will need two modes?
+o Am I sending locally calculated ranges?
+o Am I doing incoming and outgoing contact points?
+o Would also love a way to visualize the coverage map on the shoreside but currently too much data to send over wifi?
+o Occaisonally in the field, the first waypoint of the track is immediately hit causing problems. What is causing this? This should be in pAdaptiveSurveyPlanner?

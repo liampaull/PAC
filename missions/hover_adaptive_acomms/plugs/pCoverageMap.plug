@@ -1,0 +1,23 @@
+//------------------------------------------------
+// pCoverageMap config block
+
+ProcessConfig = pCoverageMap
+{
+   AppTick   = 2
+   CommsTick = 2
+
+   LCM_PROVIDER    =  766$(MODEM_ID)
+   VEHICLE_ID      = $(MODEM_ID)
+   MAX_CHANGE_YAW  =  1.00
+   MAX_MOVE        =  50
+   BLOCK_SENSOR_ON_SURFACE = false
+   MIN_DEPTH =     0
+   WORKSPACE_COORDS = $(WORKSPACE)
+   SENSOR_RESOLUTION = 1
+   SENSOR_RANGE      = 70
+   SENSOR_FUNCTION   = $(PY)   
+   MIN_UPDATE	     = 0.005
+   MIN_ENTROPY_REDUCTION = 0.001
+
+}
+

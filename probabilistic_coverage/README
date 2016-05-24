@@ -1,0 +1,18 @@
+
+This software is constructed according to the Pods software policies and
+templates.  The policies and templates can be found at:
+
+  http://sourceforge.net/projects/pods
+
+====
+
+Name:         probabilistic_coverage
+Maintainers:  Liam Paull (lpaull@mit.edu)
+Summary:      Maintains a probabilistic coverage map as described in ICRA 2014 paper "Area coverage planning that accounts for pose uncertainty with an auv seabed surveying application" Paull, Seto and Li
+Description:
+The workspace is discretized into cells. Each cell is represented with an RV. The state estimates are used to update the RVs
+
+Requirements: 
+None?
+
+License:      FILL-ME-IN

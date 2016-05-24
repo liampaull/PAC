@@ -1,0 +1,5 @@
+#include config/$(VEHICLE_NAME).def
+
+#include plugs/survey_$(VEHICLE_NAME).plug
+#include ../common_plugs/vehicle/behaviors/deploy_depth.plug
+#include ../common_plugs/vehicle/behaviors/return.plug

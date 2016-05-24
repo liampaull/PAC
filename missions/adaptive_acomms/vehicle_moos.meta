@@ -1,0 +1,89 @@
+#include config/latlong.def
+#include config/common.def
+#include config/$(VEHICLE_NAME).def
+#include config/sensors.def
+
+#include ../common_plugs/common/data_errata.plug
+#include ../common_plugs/common/data_datum.plug
+
+#define DEBUG
+
+ProcessConfig = ANTLER
+{
+	MSBetweenLaunches = 100
+
+#ifdef DEBUG
+	Run = gdb			@ NewConsole = true, ExtraProcessParams=4, InhibitMOOSParams=true, XConfig=3
+	4 = -ex,run,--args,isam_coop,-n,$(NUM_AUVS),-i,$(MODEM_ID),-l,766$(MODEM_ID)
+#else
+	Run = isam_coop			@ NewConsole = false, ExtraProcessParams=6, InhibitMOOSParams=true, XConfig=3
+	6 = -n,$(NUM_AUVS),-i,$(MODEM_ID),-l,766$(MODEM_ID)
+#endif
+
+	3 = -bg,black,-fg,white,-T,$(VEHICLE_NAME),-geometry,120x80+200+300,+sb
+
+	// The basics
+	Run = MOOSDB			@ NewConsole = false
+	Run = uSimMarine		@ NewConsole = false
+	Run = pMarinePID		@ NewConsole = false
+	Run = pHelmIvP			@ NewConsole = false
+	Run = pNodeReporter		@ NewConsole = false
+	Run = uProcessWatch		@ NewConsole = false
+	Run = pLogger			@ NewConsole = false
+	
+	// uFld and stuff to connect with shoreside
+	Run = pHostInfo		     	@ NewConsole = false
+	Run = pShare			@ NewConsole = false
+	Run = uFldNodeBroker		@ NewConsole = false
+	
+	// Simulated Sensors
+	Run = iSimGPS			@ NewConsole = false
+	Run = iSimDVL			@ NewConsole = false
+	Run = iSimCompass		@ NewConsole = false
+	Run = iSimDepth			@ NewConsole = false
+	Run = pSensorProc		@ NewConsole = false
+
+	// Acomms related
+	Run = pAcommsScheduler		@ NewConsole = false
+	Run = iAcommsDriver		@ NewConsole = false
+	Run = pAcommsManager		@ NewConsole = false
+	Run = uTimeScript		@ NewConsole = false
+
+	Run = pCoverageMap		@ NewConsole = false
+	Run = pAdaptiveSurveyPlanner    @ NewConsole = false
+
+}
+
+#include plugs/uSimMarine.plug
+#include ../common_plugs/vehicle/pMarinePID.plug
+#include ../common_plugs/vehicle/pHelmIvP.plug
+#include ../common_plugs/vehicle/pNodeReporter.plug
+#include ../common_plugs/common/uProcessWatch.plug
+#include ../common_plugs/common/pLogger.plug
+
+#include ../common_plugs/common/pHostInfo.plug
+#include ../common_plugs/vehicle/pShare.plug
+#include ../common_plugs/vehicle/uFldNodeBroker.plug
+
+#include ../common_plugs/vehicle/iSimGPS.plug
+#include ../common_plugs/vehicle/iSimDVL.plug
+#include ../common_plugs/vehicle/iSimCompass.plug
+#include ../common_plugs/vehicle/iSimDepth.plug
+
+#include ../common_plugs/vehicle/pSensorProc.plug
+
+#include ../common_plugs/vehicle/iAcommsDriver.plug
+#include ../common_plugs/vehicle/pAcommsScheduler.plug
+#include ../common_plugs/vehicle/pAcommsManager.plug
+
+#include plugs/pCoverageMap.plug
+#include plugs/pAdaptiveSurveyPlanner.plug
+
+
+ProcessConfig = uTimerScript
+{
+	AppTick = 4
+	CommsTick = 4
+	event = var=ACOMMS_TRANSMIT_RATE,val=1,time=1
+	event = quit, time=2
+}

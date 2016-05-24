@@ -1,0 +1,21 @@
+//-----------------------------
+// pAdaptiveSurveyPlanner config block
+
+ProcessConfig = pAdaptiveSurveyPlanner
+{
+	AppTick   = 2
+	CommsTick = 2
+
+	WORKSPACE_COORDS = $(WORKSPACE)
+	SURVEY_DIRECTION = $(SURVEY_DIRECTION)
+	MISSION_COMPLETION_VALUE = $(MISSION_COMPLETION_VALUE)
+        SENSOR_RANGE      = 70
+	START_LEG = $(START_LEG)
+	LEG_LENGTH = $(LEG_LENGTH)
+	K_P = 0.5
+	START_X1 = $(START_X1)
+	START_Y1 = $(START_Y1)
+	START_X2 = $(START_X2)
+	START_Y2 = $(START_Y2)
+	VEHICLE_ID = $(MODEM_ID)
+}

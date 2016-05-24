@@ -1,0 +1,16 @@
+//----------------------------------------------------------------------------
+ProcessConfig = uSimMarine
+{
+    AppTick   = 10
+    CommsTick = 10
+
+    START_X       = $(START_X1)
+    START_Y       = $(START_Y1)
+
+    START_SPEED   = 0
+    START_HEADING = $(START_HEADING)
+
+    PREFIX	  = SIM
+
+}
+

@@ -1,0 +1,12 @@
+# list of subdirectories to build, one one each line.  Empty lines
+# and lines starting with '#' are ignored
+
+
+#isam_pod
+libbot2
+visualization
+isam_coop
+MOOSApps
+probabilistic_coverage
+pCoverageMap
+pAdaptiveSurveyPlanner

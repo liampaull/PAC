@@ -1,0 +1,7 @@
+Final run is best yet?
+
+1) On restart, in current config make sure to restart frontseat also (MOOSDB is there) to get timings correct for scheduling acomms messages. 
+2) There are still gaps occuring in the coverage map causing problems - why since (active) trajectories are short? 
+3) when vehicles get to very south part of river there appears to be a problem where a big drift occurs between exp and rtk. Is it because we are not getting rtk or there is a jump between rtk and gps or something? Could make the workspace shorter?
+4) Active trajectories get quite short near the end
+5) Could make sensor swath narrower (will need to do something to fit 3 vehicles in I think)

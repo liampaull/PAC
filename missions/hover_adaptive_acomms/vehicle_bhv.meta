@@ -1,0 +1,11 @@
+#include config/$(VEHICLE_NAME).def
+#define VNAME $(VEHICLE_NAME)
+
+initialize MISSION_MODE = INACTIVE
+initialize MOOS_MANUAL_OVERRIDE=true
+
+initialize LEG = $(START_LEG)
+
+#include plugs/survey_up_leg.plug
+#include plugs/survey_down_leg.plug
+#include plugs/hover_goto_and_station.plug

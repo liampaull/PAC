@@ -1,0 +1,169 @@
+ProcessConfig = pAcommsHandler
+{
+  common {
+    log: true
+    log_path: "./data_from_runs/AcommsHandler"
+    log_verbosity: DEBUG2  
+    show_gui: false  
+  }
+  modem_id: $(MODEM_ID)  
+ 
+#ifdef runtime
+  driver_type: DRIVER_WHOI_MICROMODEM
+  driver_cfg {
+    serial_port: "$(MODEM_PORT)"
+    [MicroModemConfig.reset_nvram]: true
+    [MicroModemConfig.nvram_cfg]: "REV,1"
+    [MicroModemConfig.nvram_cfg]: "SRC,$(MODEM_ID)"
+    [MicroModemConfig.nvram_cfg]: "SNR,1"
+#ifdef RANGING one_way
+    [MicroModemConfig.nvram_cfg]: "TOA,1"
+    [MicroModemConfig.nvram_cfg]: "SNV,1"
+#endif
+  }
+
+#else
+driver_type: DRIVER_PB_STORE_SERVER
+    driver_cfg
+    {
+        [PBDriverConfig.request_socket] {  
+            socket_type: REQUEST  
+            socket_id: 0  
+            transport: TCP  
+            connect_or_bind: CONNECT  
+            ethernet_address: "127.0.0.1"
+            ethernet_port: 11142  
+        }
+        [PBDriverConfig.query_interval_seconds]: 1
+
+        [PBDriverConfig.max_frame_size]: 65536
+        [goby.moos.protobuf.Config.rate_to_bytes]: 32 // rate 0
+        [goby.moos.protobuf.Config.rate_to_bytes]: 192 // rate 1
+        [goby.moos.protobuf.Config.rate_to_bytes]: 192 // rate 2
+        [goby.moos.protobuf.Config.rate_to_bytes]: 512 // rate 3
+        [goby.moos.protobuf.Config.rate_to_bytes]: 512 // rate 4
+        [goby.moos.protobuf.Config.rate_to_bytes]: 2048 // rate 5
+
+    }
+#endif
+
+
+  mac_cfg {
+      type: MAC_NONE
+//    type: MAC_FIXED_DECENTRALIZED    
+//    slot { src: 1  rate: 1  type: DATA slot_seconds: 5  ack_requested: false} 
+ //   slot { src: 2  rate: 1  type: DATA slot_seconds: 5 ack_requested: false }
+//    slot { src: 1  rate: 1  type: DATA ack_requested: false } 
+//    slot { src: 2  rate: 1  type: DATA ack_requested: false }
+
+  }
+  queue_cfg {  # Configure the Priority Queuing layer (optional)
+    modem_id: $(MODEM_ID)  
+    message_entry {  
+      protobuf_name: "virtual_pose3d_pose3d_measurement"  
+      ack: false  
+      blackout_time: 0  
+      max_queue: 1
+      newest_first: false 
+      ttl: 500  
+      value_base: 5 
+      manipulator:  NO_MANIP 
+    }
+    message_entry {  
+      protobuf_name: "virtual_pose3d_point3d_measurement"  
+      ack: false  
+      blackout_time: 0  
+      max_queue: 100  
+      newest_first: true  
+      ttl: 500  
+      value_base: 1  
+      manipulator:  NO_MANIP
+    }
+    message_entry {  
+      protobuf_name: "global_measurement" 
+      ack: false  
+      blackout_time: 0  
+      max_queue: 100  
+      newest_first: true  
+      ttl: 500  
+      value_base: 5  
+      manipulator:  NO_MANIP
+    }
+    message_entry {  
+      protobuf_name: "ack" 
+      ack: false  
+      blackout_time: 0 
+      max_queue: 100  
+      newest_first: true 
+      ttl: 500  
+      value_base: 5  
+      manipulator:  NO_MANIP
+    }
+  }
+
+  load_shared_library: "$(MISSION_ROOT)/../../build/lib/libmessages.so"  
+ 
+  translator_entry {  
+    protobuf_name: "ack" 
+    trigger {
+      type: TRIGGER_PUBLISH  
+      moos_var: "ACK"  
+    }
+    create {  
+      technique: TECHNIQUE_PROTOBUF_TEXT_FORMAT  
+      moos_var: "ACK"  
+    }
+    publish { 
+      technique: TECHNIQUE_PROTOBUF_TEXT_FORMAT  
+      moos_var: "ACK_IN"  
+    }
+  }  
+  translator_entry {  
+    protobuf_name: "virtual_pose3d_pose3d_measurement" 
+    trigger {
+      type: TRIGGER_PUBLISH  
+      moos_var: "VIRTUAL_POSE_POSE_MEASUREMENT"  
+    }
+    create {  
+      technique: TECHNIQUE_PROTOBUF_TEXT_FORMAT  
+      moos_var: "VIRTUAL_POSE_POSE_MEASUREMENT"  
+    }
+    publish { 
+      technique: TECHNIQUE_PROTOBUF_TEXT_FORMAT  
+      moos_var: "VIRTUAL_POSE_POSE_MEASUREMENT_IN"
+    }
+  }
+  translator_entry {  
+    protobuf_name: "virtual_pose3d_point3d_measurement" 
+    trigger {
+      type: TRIGGER_PUBLISH  
+      moos_var: "VIRTUAL_POSE_POINT_MEASUREMENT"  
+    }
+    create {  
+      technique: TECHNIQUE_PROTOBUF_TEXT_FORMAT  
+      moos_var: "VIRTUAL_POSE_POINT_MEASUREMENT"  
+    }
+    publish { 
+      technique: TECHNIQUE_PROTOBUF_TEXT_FORMAT  
+      moos_var: "VIRTUAL_POSE_POINT_MEASUREMENT_IN"
+    }
+  }
+  translator_entry {  
+    protobuf_name: "global_measurement" 
+    trigger {
+      type: TRIGGER_PUBLISH  
+      moos_var: "GLOBAL_MEASUREMENT"
+    }
+    create {  
+      technique: TECHNIQUE_PROTOBUF_TEXT_FORMAT  
+      moos_var: "GLOBAL_MEASUREMENT"
+    }
+    publish { 
+      technique: TECHNIQUE_PROTOBUF_TEXT_FORMAT  
+      moos_var: "GLOBAL_MEASUREMENT_IN"
+    }
+  }
+
+  multiplex_create_moos_var: "LIAISON_COMMANDER_OUT"  
+  modem_id_lookup_path: "config/"  
+  } 			    

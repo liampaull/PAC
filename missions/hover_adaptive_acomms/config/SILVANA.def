@@ -1,0 +1,16 @@
+#define MODEM_ID 2
+#define VHOST 192.168.1.104
+#define VPORT 9400
+#define CRUISESPEED 1
+#define RETURN_PT 10,-20
+#define START_X1 70
+#define START_Y1 -30
+#define START_X2 70
+#define START_Y2 -340
+#define START_HEADING 0
+#define START_LEG down
+#define DESIRED_SPEED 1.0
+#define DEPLOY_DEPTH 0.0
+#define WORKSPACE 50,-60:250,-60:250,-310:50,-310
+#define SURVEY_DIRECTION 90.0
+#define LEG_LENGTH 310

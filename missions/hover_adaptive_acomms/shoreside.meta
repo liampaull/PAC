@@ -1,0 +1,25 @@
+#include config/shoreside.def
+#include config/common.def
+#include config/latlong.def
+#include ../common_plugs/common/data_errata.plug
+#include ../common_plugs/common/data_datum.plug
+
+ProcessConfig = ANTLER
+{
+	MSBetweenLaunches = 100
+	
+	Run = MOOSDB			@ NewConsole = false
+	Run = pMarineViewer		@ NewConsole = false
+	Run = pShare			@ NewConsole = false
+	Run = pHostInfo			@ NewConsole = false
+	Run = uFldShoreBroker		@ NewConsole = false
+	Run = uFldContactRangeSensor	@ NewConsole = false
+	Run = pLogger			@ NewConsole = false
+}
+
+#include ../common_plugs/shoreside/pMarineViewer.plug
+#include ../common_plugs/shoreside/pShare.plug
+#include ../common_plugs/common/pHostInfo.plug
+#include ../common_plugs/shoreside/uFldShoreBroker.plug
+#include ../common_plugs/shoreside/uFldContactRangeSensor.plug
+#include ../common_plugs/common/pLogger.plug

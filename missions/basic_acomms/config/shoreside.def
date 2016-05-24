@@ -1,0 +1,7 @@
+#define VEHICLE_NAME shoreside
+#define VEHICLE_TYPE topside
+#define VPORT 9003
+
+#define MODEM_ID 3
+
+#define HAZARD_FILE $(MISSION_ROOT)/config/features.txt

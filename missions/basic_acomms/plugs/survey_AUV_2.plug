@@ -1,0 +1,23 @@
+
+
+//----------------------------------------------------------------------------
+Behavior = BHV_Waypoint
+{ 
+  name      = waypt_survey
+  pwt       = 100
+  condition = RETURN = false
+  condition = DEPLOY = true
+//  endflag   = RETURN = true
+//  perpetual = true
+//  updates   = NEWPTS
+
+        lead = 50
+        lead_damper = 1
+         speed = $(DESIRED_SPEED)   // meters per second
+        radius = 5.0
+	points = format=lawnmower, label=AUV_1_survey, x=100, y=-200, height=200, width=300, lane_width=20, degs=100
+        repeat = 1
+  visual_hints = nextpt_color=red, nextpt_lcolor=green
+  visual_hints = vertex_color=yellow, line_color=white
+  visual_hints = vertex_size=2, edge_size=1
+}

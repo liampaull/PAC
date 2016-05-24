@@ -1,0 +1,8 @@
+#define VEHICLE_NAME shoreside
+#define VEHICLE_TYPE topside
+#define VNAME $(VEHICLE_NAME)
+#define VHOST localhost
+#define VPORT 9004
+
+#define MODEM_ID 4
+

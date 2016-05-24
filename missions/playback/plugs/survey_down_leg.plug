@@ -1,0 +1,21 @@
+//----------------------------------------------------------------------------
+Behavior = BHV_Waypoint
+{ 
+	name      = down_leg_survey_$(VEHICLE_NAME)
+  	pwt       = 100
+  	condition = RETURN = false
+  	condition = DEPLOY = true
+	condition = LEG    = down
+	endflag   = LEG    = up
+	perpetual = true
+        lead = 20
+        lead_damper = 10
+        speed = $(DESIRED_SPEED)   // meters per second
+        radius = 5.0
+	points = $(START_X1),$(START_Y1):$(START_X2),$(START_Y2)
+	updates = DOWN_LEG_UPDATES
+	visual_hints = nextpt_color=red, nextpt_lcolor=green
+ 	visual_hints = vertex_color=yellow, line_color=white
+  	visual_hints = vertex_size=2, edge_size=1
+}
+

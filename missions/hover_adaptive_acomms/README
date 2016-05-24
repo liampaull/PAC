@@ -1,0 +1,3 @@
+This folder just contains a launcher for the shoreside - to monitor the lcm side of things and then the plugs.
+
+The actual launch script is in the hovergroup tree at /ivp-extend/missions/liam/november/launch_vehicle.sh with associated meta file meta_vehicle_fld_rtk.moos

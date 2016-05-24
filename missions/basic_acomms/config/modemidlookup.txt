@@ -1,0 +1,5 @@
+// modem id, vehicle name (should be community name), vehicle type
+0, broadcast, broadcast
+1, AUV_1, AUV
+2, AUV_2, AUV
+3, shoreside, topside
