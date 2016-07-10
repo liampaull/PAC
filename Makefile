@@ -48,7 +48,7 @@ update:
 checkout:
 	svn co https://svn.csail.mit.edu/marine/pods/isam_pod 
 	svn co https://svn.csail.mit.edu/marine/pods/visualization
-	svn co http://libbot.googlecode.com/svn/trunk libbot2
+	git clone https://github.com/libbot2/libbot2.git libbot2
 	svn co https://svn.csail.mit.edu/marine/projects/auvcslam/MOOSApps
 	svn co https://svn.csail.mit.edu/marine/projects/auvcslam/isam_coop
 	mkdir -p missions
