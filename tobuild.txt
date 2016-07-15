@@ -5,8 +5,8 @@
 isam_pod
 libbot2
 visualization
-isam_coop
-MOOSApps
+AUVCSLAM/isam_coop
+AUVCSLAM/MOOSApps
 probabilistic_coverage
 pCoverageMap
 pAdaptiveSurveyPlanner

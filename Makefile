@@ -49,8 +49,7 @@ checkout:
 	svn co https://svn.csail.mit.edu/marine/pods/isam_pod 
 	svn co https://svn.csail.mit.edu/marine/pods/visualization
 	git clone https://github.com/libbot2/libbot2.git libbot2
-	svn co https://svn.csail.mit.edu/marine/projects/auvcslam/MOOSApps
-	svn co https://svn.csail.mit.edu/marine/projects/auvcslam/isam_coop
+	git clone https://github.com/liampaull/AUVCSLAM.git
 	mkdir -p missions
 	cd missions
 	svn co https://svn.csail.mit.edu/marine/projects/auvcslam/missions/common_plugs

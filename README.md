@@ -20,6 +20,9 @@ Steps to get code up and running
 4) dependencies for iSAM
  - http://people.csail.mit.edu/kaess/isam/doc/index.html
 
+5a) LCM 1.0.0
+ - https://github.com/lcm-proj/lcm/releases/tag/v1.0.0
+
 5) dependencies for libbot2
  - https://github.com/libbot2/libbot2
 

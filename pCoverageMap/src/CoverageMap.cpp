@@ -29,6 +29,8 @@ CoverageMap::CoverageMap(){
   m_max_change_yaw = PI/6;
   m_max_move = 5;
   m_id = 1;
+  m_ground_truth = false; // do we want to build a ground truth coverage map (i.e. from GPS data or simulation data)
+  m_runtype = "simulation" ; // or "hover" -- affects what vars to subscribe to for GPS if in m_ground_truth
   m_points_updated = 0;
   m_mission_completion_value = 0.95;
   m_mission_completion_criterion = "mean";
@@ -40,6 +42,20 @@ CoverageMap::CoverageMap(){
   m_current_pose_initialized = false;
   pthread_mutex_init(&m_map_update_mutex, NULL);
   pthread_mutex_init(&m_pose_update_mutex, NULL);
+
+  if (m_ground_truth){
+    m_current_pose.mu[2] = 0.0;
+    m_current_pose.mu[4] = 0.0;
+    m_current_pose.mu[5] = 0.0;
+
+    for (int i =0; i<6; i++)
+      for (int j=0; j<6; j++)
+	if (i==j)
+	  m_current_pose.sigma[i][j]=0.0001;
+	else
+	  m_current_pose.sigma[i][j]=0.0;
+
+  }
 }
 
 
@@ -60,10 +76,36 @@ AppCastingMOOSApp::OnNewMail(NewMail);
     CMOOSMsg &msg = *p;
     string key    = msg.GetKey();
     double dval  = msg.GetDouble();
-string sval  = msg.GetString(); 
+    string sval  = msg.GetString(); 
 
-    if(key != "APPCAST_REQ") // handle by AppCastingMOOSApp
-       reportRunWarning("Unhandled Mail: " + key);
+    if (m_runtype == "hover"){
+      if(key == "RTK_X"){
+	m_current_pose.mu[1] = dval;
+	m_current_pose_initialized=true;
+      }
+      else if (key == "RTK_Y"){
+	m_current_pose.mu[0] = dval;
+	m_current_pose_initialized=true;
+      }
+      else if (key == "RTK_HEADING"){
+	m_current_pose.mu[3] = dval;
+	m_current_pose_initialized=true;
+      }
+    }
+    else if (m_runtype == "simulation")
+      if (key == "SIM_X"){
+	m_current_pose.mu[1] = dval;
+	m_current_pose_initialized=true;
+      }
+      else if (key == "SIM_Y"){
+	m_current_pose.mu[0] = dval;
+	m_current_pose_initialized=true;
+      }
+      else if (key == "SIM_HEADING"){
+	m_current_pose.mu[3] = dval;
+	m_current_pose_initialized=true;
+      }
+	  
    }
 	
    return(true);
@@ -91,6 +133,8 @@ bool CoverageMap::Iterate()
   }
   if(pthread_mutex_trylock(&m_map_update_mutex)==0){
     update(); // update the coverage map
+    if (m_ground_truth)
+      post_trajectory_point();
     pthread_mutex_unlock(&m_map_update_mutex);
   }
   Notify("EFFECTIVE_SENSOR_RANGE",m_coverage_map.get_effective_range());
@@ -218,7 +262,12 @@ void CoverageMap::ReadMissionFile()
  void CoverageMap::registerVariables()
 {
   AppCastingMOOSApp::RegisterVariables();
-  // Register("FOOBAR", 0);
+  if (m_ground_truth){
+    if(m_runtype=="simulation")
+      Register("SIM_*", 0); //
+    else if (m_runtype == "hover")
+      Register("RTK_*");
+  }
 }
  
  
@@ -275,17 +324,24 @@ void CoverageMap::lcm_subscribe()
   m_lcm->subscribe(string("TRAJECTORY"),&CoverageMap::on_trajectory,this);
 }
 
-void CoverageMap::on_pose(const lcm::ReceiveBuffer* rbuf,
-			   const string& channel,
-			   const coop::pose3_t* msg)
-{
-  // just update the current pose so that we can run the coverage map updating at Apptick frequency
-  if(pthread_mutex_trylock(&m_pose_update_mutex)==0){
-    m_current_pose  = *msg;
+void CoverageMap::post_trajectory_point(){
     XYPoint p(m_current_pose.mu[1], m_current_pose.mu[0]);
     m_trajectory_seg.add_vertex(p);
     string s = m_trajectory_seg.get_spec();
     Notify("VIEW_SEGLIST",s);
+}  
+
+void CoverageMap::on_pose(const lcm::ReceiveBuffer* rbuf,
+			   const string& channel,
+			   const coop::pose3_t* msg)
+{
+  if(m_ground_truth)
+    return; // in ground_truth mode coverage map comes from MOOS vars
+
+  // just update the current pose so that we can run the coverage map updating at Apptick frequency
+  if(pthread_mutex_trylock(&m_pose_update_mutex)==0){
+    m_current_pose  = *msg;
+    post_trajectory_point();
     pthread_mutex_unlock(&m_pose_update_mutex);
   }
   if (!m_current_pose_initialized){
@@ -296,7 +352,10 @@ void CoverageMap::on_pose(const lcm::ReceiveBuffer* rbuf,
 
 void CoverageMap::on_trajectory(const lcm::ReceiveBuffer* rbuf,
 				  const string& channel,
-				  const coop::trajectory_t* msg){
+				  const coop::trajectory_t* msg)
+{
+  if (m_ground_truth)
+    return; // no need to process trajectory in ground truth (we had the perfect data anyways)
   // lock both mutexs?
   pthread_mutex_lock(&m_map_update_mutex);
   pthread_mutex_lock(&m_pose_update_mutex);

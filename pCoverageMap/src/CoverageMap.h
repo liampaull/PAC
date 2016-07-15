@@ -61,6 +61,7 @@ class CoverageMap : public AppCastingMOOSApp
  private:
    int64_t sliding_window_test(const coop::trajectory_t*);
    double  entropy(Eigen::MatrixXd);
+   void    post_trajectory_point();
 
  private: // Configuration variables
 
@@ -73,7 +74,9 @@ class CoverageMap : public AppCastingMOOSApp
    XYPolygon         m_workspace_poly;
    double            m_sensor_resolution;
    double            m_sensor_range;
+   bool              m_ground_truth;
    vector<double>    m_sensor_func;
+   string            m_runtype;
    double            m_mission_completion_value;
    string            m_mission_completion_criterion; //"mean"
    double            m_min_update;

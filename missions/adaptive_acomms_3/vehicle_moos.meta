@@ -55,7 +55,7 @@ ProcessConfig = ANTLER
 	Run = pAcommsScheduler		@ NewConsole = false
 	Run = iAcommsDriver		@ NewConsole = false
 	Run = uTimerScript		@ NewConsole = false
-
+	Run = pVRP			@ NewConsole = false
 	Run = pAdaptiveSurveyPlanner    @ NewConsole = false
 
 }
@@ -92,4 +92,10 @@ ProcessConfig = uTimerScript
         CommsTick = 4
         event = var=ACOMMS_TRANSMIT_RATE,val=1,time=1
         event = quit, time=2
+}
+
+ProcessConfig = pVRP
+{
+	AppTick = 4
+	CommsTick = 4
 }
