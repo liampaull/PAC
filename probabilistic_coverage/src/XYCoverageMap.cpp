@@ -12,7 +12,7 @@
 
 #include "XYCoverageMap.h"
 #include <math.h>
-
+#include <fstream>
 
 #ifndef PI
 #define PI 3.141592653589793
@@ -20,7 +20,7 @@
 
 using namespace std;
 
-#define DEBUG 0
+#define DEBUG 1
 
 XYCoverageMap::XYCoverageMap()
 {
@@ -57,15 +57,31 @@ bool XYCoverageMap::initialize(const XYPolygon& workspace,double cell_size,doubl
   return(true);
 }
 
+void XYCoverageMap::save(string filename)
+{
+  ofstream f;
+  f.open (filename.c_str());
+  int width = int(floor(m_bounding_square.get_max_x())) - int(floor(m_bounding_square.get_min_x()));
+  int c = 0;
+  for (int i =0; i<int(m_cell_coverage.size()) ; i++){
+    f << m_cell_coverage[i].GetMean() << ", ";
+    c++;
+    if (c==width){
+      f << endl;
+      c = 0;
+    }
+  }
+    
+  f.close();
+
+}
 
 // Procedure: update. 
 // Description: this is the key functin for maintaining the coverage map. Takes two poses that constitute a "move" as well as a coverage sensor. A line between the start and finish pose is parameterized and stepped along. At each point we take the pose and project it through the coverage sensor function to update the probabilities of coverage over the map. For more info see Paull, Seto and Li ICRA 2014.
 vector<int> XYCoverageMap::update(coop::pose3_t startPose, coop::pose3_t endPose, CoverageSensor sensor, bool real, int downSampleRate)
 {
   vector<int> pointsHit;
-
   // Step 1: Take the current pose and project it down to the line orthogonal to vehicle motion (yaw)
-
   PDF rangeRV = project_pose(endPose);
   if (DEBUG) {
     MOOSTrace("Built Range RV:\n");
@@ -339,6 +355,8 @@ PDF XYCoverageMap::project_pose(coop::pose3_t pose)
   double sYY = pose.sigma[1][1];
   double sXY = pose.sigma[0][1];
   double yaw = pose.mu[3];
+
+  cout << " yaw " << yaw << " sXX: " << sXX << " sXY: " << sXY << " sYY: " << sYY << endl;
 
   rho = sXY/(sqrt(sXX)*sqrt(sYY)); 
   if (rho < 0){

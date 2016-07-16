@@ -33,6 +33,8 @@ class XYCoverageMap : public XYConvexGrid {
  void set_completion_value(double dval){m_completion_value = dval;};
  double get_effective_range(){return m_effective_range;}; 
 
+ void save(string);
+
  private:
 
   PDF   RVMax(PDF, PDF);

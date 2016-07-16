@@ -18,6 +18,8 @@ ProcessConfig = pCoverageMap
    SENSOR_FUNCTION   = $(PY)   
    MIN_UPDATE	     = 0.05
    MIN_ENTROPY_REDUCTION = 0.01
+   GROUND_TRUTH      = true
+   RUNTYPE	     = hover
 
 }
 

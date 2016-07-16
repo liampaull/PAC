@@ -43,19 +43,6 @@ CoverageMap::CoverageMap(){
   pthread_mutex_init(&m_map_update_mutex, NULL);
   pthread_mutex_init(&m_pose_update_mutex, NULL);
 
-  if (m_ground_truth){
-    m_current_pose.mu[2] = 0.0;
-    m_current_pose.mu[4] = 0.0;
-    m_current_pose.mu[5] = 0.0;
-
-    for (int i =0; i<6; i++)
-      for (int j=0; j<6; j++)
-	if (i==j)
-	  m_current_pose.sigma[i][j]=0.0001;
-	else
-	  m_current_pose.sigma[i][j]=0.0;
-
-  }
 }
 
 
@@ -66,10 +53,9 @@ CoverageMap::~CoverageMap()
 
 //---------------------------------------------------------
 // Procedure: OnNewMail
-// This app subscibes to basically no MOOS mail.. everything comes through LCM channel
 bool CoverageMap::OnNewMail(MOOSMSG_LIST &NewMail)
 {
-AppCastingMOOSApp::OnNewMail(NewMail);
+  AppCastingMOOSApp::OnNewMail(NewMail);
 
   MOOSMSG_LIST::iterator p;
   for(p=NewMail.begin(); p!=NewMail.end(); p++) {
@@ -77,7 +63,6 @@ AppCastingMOOSApp::OnNewMail(NewMail);
     string key    = msg.GetKey();
     double dval  = msg.GetDouble();
     string sval  = msg.GetString(); 
-
     if (m_runtype == "hover"){
       if(key == "RTK_X"){
 	m_current_pose.mu[1] = dval;
@@ -88,11 +73,11 @@ AppCastingMOOSApp::OnNewMail(NewMail);
 	m_current_pose_initialized=true;
       }
       else if (key == "RTK_HEADING"){
-	m_current_pose.mu[3] = dval;
+	m_current_pose.mu[3] = dval*PI/180;
 	m_current_pose_initialized=true;
       }
     }
-    else if (m_runtype == "simulation")
+    else if (m_runtype == "simulation"){
       if (key == "SIM_X"){
 	m_current_pose.mu[1] = dval;
 	m_current_pose_initialized=true;
@@ -105,8 +90,11 @@ AppCastingMOOSApp::OnNewMail(NewMail);
 	m_current_pose.mu[3] = dval;
 	m_current_pose_initialized=true;
       }
-	  
-   }
+    }
+    if (key == "SAVE_COVERAGE_MAP"){
+      m_coverage_map.save(sval);
+    }
+  }
 	
    return(true);
 }
@@ -206,6 +194,14 @@ void CoverageMap::ReadMissionFile()
       m_block_sensor_on_surface = (tolower(value) == "true");
       handled = true;
     }
+    if(param == "GROUND_TRUTH"){
+      m_ground_truth = (tolower(value) == "true");
+      handled = true;
+    }
+    if(param == "RUNTYPE"){
+      m_runtype = tolower(value);
+      handled = true;
+    }
     if(param == "MISSION_COMPLETION_VALUE"){
       m_mission_completion_value = atof(value.c_str());
       handled = true;
@@ -253,6 +249,22 @@ void CoverageMap::ReadMissionFile()
   }
   m_trajectory_seg.set_label("trajectory_"+m_host_community);
 
+  if (m_ground_truth){
+    m_current_pose.mu[2] = 0.0;
+    m_current_pose.mu[4] = 0.0;
+    m_current_pose.mu[5] = 0.0;
+
+    for (int i =0; i<6; i++)
+      for (int j=0; j<6; j++)
+	if (i==j){
+	  m_previous_pose.sigma[i][j]=1;
+	  m_current_pose.sigma[i][j]=1;
+	}
+	else{
+	  m_previous_pose.sigma[i][j]=0.0;
+	  m_current_pose.sigma[i][j]=0.0;
+	}
+  }
 
 }  
 
@@ -263,11 +275,13 @@ void CoverageMap::ReadMissionFile()
 {
   AppCastingMOOSApp::RegisterVariables();
   if (m_ground_truth){
-    if(m_runtype=="simulation")
-      Register("SIM_*", 0); //
-    else if (m_runtype == "hover")
-      Register("RTK_*");
+    if(m_runtype =="simulation")
+      Register("SIM_*","*", 0); //
+    else if (m_runtype == "hover"){
+      Register("RTK_*","*",0);
+    }
   }
+  Register("SAVE_COVERAGE_MAP","*",0);
 }
  
  

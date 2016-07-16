@@ -3,3 +3,5 @@ run ./playback_launch.sh for each vehicle and select the appropriate moos file a
 run ./sim_shoreside_launch.sh and the pMarineViewer pops up (it will be in an error state because node reports are missing data.. that's ok)
 
 Hit run on the uPlayback windows  
+
+use the value of GROUND_TRUTH in the plugs/pCoverageMap.plug to toggle whether to use the ground truth (GPS) to generate the coverage map or the actual uncertain pose data to generate a probabilistic coverage map.

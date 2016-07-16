@@ -15,6 +15,7 @@ ProcessConfig = pCoverageMap
    SENSOR_RESOLUTION = 1
    SENSOR_RANGE      = 70
    SENSOR_FUNCTION   = $(PY)   
-
+   GROUND_TRUTH      = false
+   RUNTYPE	     = hover
 }
 

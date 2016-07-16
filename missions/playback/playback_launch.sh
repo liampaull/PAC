@@ -44,7 +44,6 @@ pushd ${SCRIPT_DIRNAME} &>/dev/null
 source scripts/vehicle_launch.sh
 popd &>/dev/null
 
-lcm-logger --lcm-url=udpm://239.255.76.56:7662 &>/dev/null & 
 
 echo -e
 echo "// End of line."

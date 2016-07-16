@@ -23,14 +23,16 @@ ProcessConfig = ANTLER
 	Run = uPlayback			@ NewConsole = false
 	Run = uTimerScript		@ NewConsole = false
 	Run = pVRP			@ NewConsole = false
+
+	Run = pCoverageMap		@ NewConsole = false
 }
 
 
-#include ../common_plugs/vehicle/pNodeReporter.plug
-
+#include plugs/pNodeReporter.plug
 #include ../common_plugs/common/pHostInfo.plug
 #include ../common_plugs/vehicle/pShare.plug
 #include ../common_plugs/vehicle/uFldNodeBroker.plug
+#include plugs/pCoverageMap.plug
 
 ProcessConfig = uTimerScript
 {
