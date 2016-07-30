@@ -72,7 +72,7 @@ bool CoverageMap::OnNewMail(MOOSMSG_LIST &NewMail)
 	m_current_pose.mu[0] = dval;
 	m_current_pose_initialized=true;
       }
-      else if (key == "RTK_HEADING"){
+      else if (key == "GPS_HEADING"){
 	m_current_pose.mu[3] = dval*PI/180;
 	m_current_pose_initialized=true;
       }
@@ -279,6 +279,8 @@ void CoverageMap::ReadMissionFile()
       Register("SIM_*","*", 0); //
     else if (m_runtype == "hover"){
       Register("RTK_*","*",0);
+      Register("COMPASS_*","*",0);
+      Register("GPS_*","*",0);
     }
   }
   Register("SAVE_COVERAGE_MAP","*",0);

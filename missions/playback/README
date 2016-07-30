@@ -5,3 +5,7 @@ run ./sim_shoreside_launch.sh and the pMarineViewer pops up (it will be in an er
 Hit run on the uPlayback windows  
 
 use the value of GROUND_TRUTH in the plugs/pCoverageMap.plug to toggle whether to use the ground truth (GPS) to generate the coverage map or the actual uncertain pose data to generate a probabilistic coverage map.
+
+To save the current coverage map:
+uPokeDB SAVE_COVERAGE_MAP=filename.csv
+then enter the url (most probably localhost) and the port
